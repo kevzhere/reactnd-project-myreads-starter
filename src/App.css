@@ -14,11 +14,19 @@ body, .app {
   padding: 10px 0;
   background: #2e7c31;
   text-align: center;
+  clear: both;
 }
 .list-books-title h1 {
   font-weight: 400;
   margin: 0;
   color: white;
+  display: inline-block;
+}
+
+.myLinks{
+  padding-right: 2%;
+  color: blue;
+  float: right;
 }
 
 .list-books-content {
