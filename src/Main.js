@@ -3,14 +3,18 @@ import { Link } from 'react-router-dom';
 
 class Main extends Component{
 
-    handleChange(event, book){
+    componentWillReceiveProps(props){
+        this.setState({books: props.books});
+      }
+    
+      handleChange(event, book){
         this.props.changeShelf(book, event.target.value);
-    }
+      }
 
 
     render(){
         const allBooks = this.props.books.map((book)=>(
-            <li key={book.title}>
+            <li key={book.id}>
                 <div className="book">
                     <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
@@ -33,7 +37,7 @@ class Main extends Component{
         ));
 
         const newBooks = this.props.books.filter((book)=>(book.publishedDate.split("-")[0] > 2009)).map((book)=>(
-            <li key={book.title}>
+            <li key={book.id}>
                 <div className="book">
                     <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
@@ -54,7 +58,7 @@ class Main extends Component{
         ));
 
         const popularBooks = this.props.books.filter((book)=>(book.averageRating > 3)).map((book)=>(
-            <li key={book.title}>
+            <li key={book.id}>
                 <div className="book">
                     <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
