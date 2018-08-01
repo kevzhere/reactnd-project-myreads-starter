@@ -15,25 +15,19 @@ class BooksApp extends React.Component {
   componentDidMount(){
     BooksAPI.getAll().then((val)=>{
       this.setState({books: val})
-      console.log("all books", this.state.books);
     })
   }
 
   changeShelf = (book, shelf, search)=>{
     BooksAPI.update(book, shelf);
-    console.log("search", search);
     if(search){
       let newBook = true;
       for(let i = 0; i < this.state.books.length; i++){
         if(this.state.books[i].id === book.id)
           newBook = false;
       }
-      console.log("newbooks", newBook);
       if(newBook){
-        console.log("new bookS", this.state.books);
-        console.log("adding books");
         this.state.books.push(book);
-        console.log("new bookS", this.state.books);
       }
     }
     const books = this.state.books.map((b)=>{
@@ -43,7 +37,6 @@ class BooksApp extends React.Component {
       return b;
     });
     this.setState({books});
-    console.log(this.state.books);
   }
 
   render() {

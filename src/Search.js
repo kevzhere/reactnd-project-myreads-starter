@@ -10,22 +10,18 @@ class Search extends Component{
 
     searchStore = (e) =>{
         e.preventDefault();
-        console.log(this.refs.searchTerm.value);
         const value = this.refs.searchTerm.value;
         search(value).then((data)=>{
             this.setState({books: data});
-            console.log(this.state.books);
         });
     }
 
     handleChange(event, book){
-        console.log("handled");
         this.props.changeShelf(book, event.target.value, true);
       }
 
     render(){
         let foundBooks;
-        console.log("whats books, ", this.state.books.length);
         if(this.state.books.length){
             foundBooks = this.state.books.map((book)=>(
                 <li key={book.id}>
