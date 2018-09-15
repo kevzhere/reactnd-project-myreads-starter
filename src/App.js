@@ -1,10 +1,11 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
-import './App.css'
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Main from './Main.js';
 import Search from './Search.js';
 import MyBooks from './MyBooks';
+
+import './App.css'
 
 class BooksApp extends React.Component {
 
@@ -13,8 +14,10 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount(){
-    BooksAPI.getAll().then((val)=>{
-      this.setState({books: val})
+    BooksAPI.getAll().then((books)=>{
+      ('not gettinb books?', books);
+      this.setState({books});
+      ('app mounted, whats books?', this.state.books);
     })
   }
 
@@ -42,6 +45,7 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
+      <Switch>
         <Route exact path="/" render={()=>(
         <Main
           books = {this.state.books}
@@ -49,6 +53,7 @@ class BooksApp extends React.Component {
         />)}/>
         <Route path="/Search" render={()=>(
           <Search
+          books = {this.state.books}
           changeShelf={this.changeShelf}
           />
         )}
@@ -60,6 +65,7 @@ class BooksApp extends React.Component {
           />
         )}
         />
+        </Switch>
       </div>
     )
   }

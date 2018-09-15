@@ -5,46 +5,71 @@ import { search } from './BooksAPI';
 class Search extends Component{
 
     state = {
-        books: []
+        books: [],
+        results: []
+    }
+
+    componentWillReceiveProps(props){
+        this.setState({books: props.books});
     }
 
     searchStore = (e) =>{
         e.preventDefault();
         const value = this.refs.searchTerm.value;
-        search(value).then((data)=>{
-            this.setState({books: data});
+        ('searching', value);
+        search(value).then((books)=>{
+            ('my books', this.state.books);
+            if(!!books){
+                if(books.length>0){
+                  const results = books.map((book) => {
+                    const existingBook = this.state.books.find((b) => b.id === book.id)
+                    book.shelf = !!existingBook ? existingBook.shelf : 'none'
+                    return book
+                  });
+                  ('results', results);
+                  this.setState({ results })
+                }  
+              }
         });
     }
 
     handleChange(event, book){
+        ('changing');
         this.props.changeShelf(book, event.target.value, true);
       }
 
     render(){
+        ('rendering search');
+        ('my books?', this.state.results);
         let foundBooks;
-        if(this.state.books.length){
-            foundBooks = this.state.books.map((book)=>(
-                <li key={book.id}>
-                    <div className="book">
-                        <div className="book-top">
-                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.smallThumbnail})` }}></div>
-                        <div className="book-shelf-changer">
-                        <form>
-                            <select value={book.shelf ? book.shelf:"none"}  onChange={(e)=>this.handleChange(e, book)}>
-                                <option value="move" disabled>Move to...</option>
-                                <option value="currentlyReading">Currently Reading</option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                            </select>
-                        </form>
+        if(this.state.results.length > 0){
+            foundBooks = this.state.results.map((book)=> {
+                ('*************************************');
+                (book);
+                ('*************************************');
+                return (
+                    <li key={book.id}>
+                        <div className="book">
+                            <div className="book-top">
+                            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks ? book.imageLinks.smallThumbnail : 'https://cataas.com/cat'})` }}></div>
+                            <div className="book-shelf-changer">
+                            <form>
+                                <select value={book.shelf}  onChange={(e)=>this.handleChange(e, book)}>
+                                    <option value="move" disabled>Move to...</option>
+                                    <option value="currentlyReading">Currently Reading</option>
+                                    <option value="wantToRead">Want to Read</option>
+                                    <option value="read">Read</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </form>
+                            </div>
+                            </div>
+                            <div className="book-title">{book.title}</div>
+                            <div className="book-authors">{book.authors}</div>
                         </div>
-                        </div>
-                        <div className="book-title">{book.title}</div>
-                        <div className="book-authors">{book.authors}</div>
-                    </div>
-                </li>
-            ));
+                    </li>
+                );
+            })
         }
 
         return(
@@ -60,7 +85,7 @@ class Search extends Component{
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <form onSubmit={this.searchStore}>
+                <form onKeyUp={this.searchStore}>
                     <input type="text" ref="searchTerm" placeholder="Search by title or author"/>
                 </form>
 

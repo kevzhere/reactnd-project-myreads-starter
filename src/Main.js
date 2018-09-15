@@ -13,6 +13,7 @@ class Main extends Component{
 
 
     render(){
+        ('inside main');
         const allBooks = this.props.books.map((book)=>(
             <li key={book.id}>
                 <div className="book">
@@ -35,7 +36,7 @@ class Main extends Component{
                 </div>
             </li>
         ));
-
+        ('all books', allBooks);
         const newBooks = this.props.books.filter((book)=>(book.publishedDate.split("-")[0] > 2009)).map((book)=>(
             <li key={book.id}>
                 <div className="book">
